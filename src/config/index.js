@@ -1,0 +1,1 @@
+export const BASE_URL = 'http://localhost:3000' //配置请求地址

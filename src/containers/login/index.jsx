@@ -1,13 +1,21 @@
 import React, {Component} from 'react'
-import {Form, Input, Button} from 'antd'
+import {Redirect} from 'react-router-dom'
+import {Form, Input, Button, message} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import {connect} from 'react-redux'
+
+import {saveUserAction} from '../../redux/actions/loginAction.js'
+import {reqLogin} from '../../api'
 
 import './css/login.less'
 import logo from './images/logo5.png'
 
 const {Item} = Form
 
-export default class Login extends Component {
+@connect(
+  state => ({isLogin: state.userInfo.isLogin}),
+  {saveUserAction})
+class Login extends Component {
 
   // 自定义校验
   validator = (rule, value) => {
@@ -17,6 +25,7 @@ export default class Login extends Component {
       return Promise.reject('密码输入大于等于4位')
     } else if (value.length > 12) {
       return Promise.reject('密码输入小于等于12位')
+      // eslint-disable-next-line 
     } else if (!/^[a-zA-Z0-9\._]*$/.test(value)) {
       return Promise.reject('除了字母数字下划线小数点外不包含其他特殊字符')
     }
@@ -24,10 +33,25 @@ export default class Login extends Component {
   }
 
   // 收集数据
-  onFinish = (value) =>{
-    console.log(value)
+  onFinish = async (value) =>{
+    let loginResult = await reqLogin(value)
+    const {status} = loginResult
+    if (status === 0) {
+      message.success('登录成功', 1)
+
+      //保存用户信息，交由redux进行管理
+      this.props.saveUserAction(loginResult.data)
+
+
+      this.props.history.replace('/admin')
+    } else {
+      message.warning(loginResult.msg, 1)
+    }
   }
   render () {
+    if (this.props.isLogin) {
+      return <Redirect to='/admin'/>
+    }
     return (
       <div id="login">
         <div className="header">
@@ -41,6 +65,7 @@ export default class Login extends Component {
             { required: true, message: '请输入用户名！' },
             { min: 4, message: '用户名输入大于等于4位'},
             { max: 12, message: '密码输入小于等于12位'},
+            // eslint-disable-next-line 
             { pattern: /^[a-zA-Z0-9\._]*$/, message: '除了字母数字下划线小数点外不包含其他特殊字符'}
           ]}
         >
@@ -54,6 +79,7 @@ export default class Login extends Component {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="密码"
+            autoComplete="password"
           />
         </Item>
           <Item>
@@ -65,3 +91,7 @@ export default class Login extends Component {
     )
   }
 }
+
+export default Login
+
+
