@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import {Redirect} from 'react-router-dom'
 import {Form, Input, Button, message} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import {connect} from 'react-redux'
 
+import CheckLogin from '../check_login'
 import {saveUserAction} from '../../redux/actions/loginAction.js'
 import {reqLogin} from '../../api'
 
@@ -15,6 +15,7 @@ const {Item} = Form
 @connect(
   state => ({isLogin: state.userInfo.isLogin}),
   {saveUserAction})
+@CheckLogin
 class Login extends Component {
 
   // 自定义校验
@@ -49,15 +50,13 @@ class Login extends Component {
     }
   }
   render () {
-    if (this.props.isLogin) {
-      return <Redirect to='/admin'/>
-    }
     return (
       <div id="login">
         <div className="header">
           <img src={logo} alt="logo"/> <h1>商品后台管理系统</h1>
         </div>
         <div className="content">
+          <h2>用户登录</h2>
           <Form onFinish={this.onFinish}>
           <Item
           name="username"

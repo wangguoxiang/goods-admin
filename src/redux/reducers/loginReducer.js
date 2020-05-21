@@ -6,7 +6,7 @@ let _id = localStorage.getItem('_id')
 let initState = {
   user: _user || '',
   id: _id || '',
-  isLogin: _user &&  _id
+  isLogin: _user &&  _id ? true : false
 }
 
 function loginReducer (state = initState, action) {
