@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Button} from 'antd'
-import {FullscreenOutlined, FullscreenExitOutlined} from '@ant-design/icons';
+import {Button, Modal} from 'antd'
+import {FullscreenOutlined, FullscreenExitOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import screenfull from 'screenfull'
 import dayjs from 'dayjs'
 
@@ -9,6 +9,8 @@ import {reqWeaterData} from '../../../api'
 import {deleteUserAction} from '../../../redux/actions/loginAction.js'
 
 import './header.less'
+
+const { confirm } = Modal
 
 @connect(
   state => ({username: state.userInfo.user}),
@@ -22,7 +24,16 @@ class Header extends Component {
   }
   // 用户退出登录
   logOut = () => {
-    this.props.deleteUserAction()
+    confirm({
+      title: '确认退出登录吗？',
+      icon: <ExclamationCircleOutlined />,
+      content: '退出登录后需重新登录',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: ()=> {
+        this.props.deleteUserAction()
+      }
+    });
   }
 
   // 切换屏幕是否全屏

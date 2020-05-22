@@ -14,8 +14,8 @@ export default function (CurrentCompoent) {
       const {isLogin} = this.props
       const {pathname} = this.props.history.location
       // 检验规则
-      if (pathname === '/login' && isLogin === true) return <Redirect to="/admin"/>
-      if (pathname === '/admin' && isLogin !== true) return <Redirect to="/login"/>
+      if (pathname === '/login' && isLogin ) return <Redirect to="/admin"/>
+      if (pathname !== '/login' && !isLogin ) return <Redirect to="/login"/>
 
       return <CurrentCompoent {...params}/>
     }
