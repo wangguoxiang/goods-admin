@@ -1,13 +1,19 @@
 import React, {Component} from 'react'
 import {withRouter, Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Menu} from 'antd'
 
+import {saveTitleAction} from '../../../redux/actions/saveTitleAction.js'
 import menuList from '../../../config/menuConfig.js'
 import './left-nav.less'
 import Logo from './images/logo.jpg'
 
 const { SubMenu, Item} = Menu
 
+@connect(
+  state => ({}),
+  {saveTitleAction}
+)
 @withRouter
 class LeftNav extends Component {
 
@@ -21,7 +27,7 @@ class LeftNav extends Component {
         )
       } else {
         return (
-          <Item key={item.key} icon={< item.icon/>}>
+          <Item key={item.key} icon={< item.icon/>} onClick={()=>{this.props.saveTitleAction(item.title)}}>
             <Link to={item.path}>{item.title}</Link>
           </Item>
         )

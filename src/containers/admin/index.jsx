@@ -21,15 +21,6 @@ const {Footer, Sider, Content } = Layout;
 @CheckLogin
 class Admin extends Component {
 
-  state = {
-    collapsed: false,
-  }
-
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
-  }
-
   render () {
     return (
     <Layout id="admin">

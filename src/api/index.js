@@ -20,3 +20,9 @@ export const reqWeaterData = () => {
     })
   })
 }
+
+// 请求分类列表
+export const reqCategoryList = () => myAxios.get('/manage/category/list')
+
+// 添加分类
+export const reqAddCategory = (categoryName) => myAxios.post('/manage/category/add',{categoryName})
