@@ -5,7 +5,7 @@ import {
   PlusCircleOutlined
 } from '@ant-design/icons'
 
-import {reqAddCategory} from '../../api'
+import {reqAddCategory, reqUpdateCategoty} from '../../api'
 import {saveCategoryActionAsync} from '../../redux/actions/saveCategoryAction.js'
 
 const {Item} = Form 
@@ -15,7 +15,9 @@ const {Item} = Form
   {saveCategoryActionAsync}
 )
 class Category extends Component{
-  state = { visible: false }
+  state = { 
+    visible: false
+   }
 
   showModal = () => {
     this.setState({
@@ -27,10 +29,15 @@ class Category extends Component{
     this.refs.categoryForm.validateFields().then(
       async (value) => {
         let {category} = value
-        let result = await reqAddCategory(category)
+        let result
+        if (this.isAdd) {
+          result = await reqAddCategory(category)
+        } else {
+          result = await reqUpdateCategoty(this.categotyId, category)
+        }
         if (result.status === 0 ){
           this.getCategoryList()
-          message.success('添加分类成功',1)
+          message.success('操作分类成功',1)
           this.setState({
             visible: false
           })
@@ -58,6 +65,14 @@ class Category extends Component{
    this.props.saveCategoryActionAsync()
   }  
 
+
+  // 处理修改分类
+  handleChange = (item) => {
+    this.isAdd = false          
+    this.showModal()
+    this.categotyId = item.key
+  }
+
   componentDidMount() {
     this.getCategoryList()
   }
@@ -67,7 +82,7 @@ class Category extends Component{
         key: item._id,
         name: item.name
       }
-    });
+    })
     
     const columns = [
       {
@@ -77,20 +92,27 @@ class Category extends Component{
       },
       {
         title: '操作',
-        dataIndex: '_id',
+       // dataIndex: 'name',
         key: 'todo',
         align: 'center',
         width: '30%',
-        render:()=>{
-          return <Button type="link">修改分类</Button>
+        render:(item)=>{
+          return <Button type="link" onClick={()=>this.handleChange(item)}>修改分类</Button>
         } 
       }
     ]
     return(
       <div>
         <Card 
-          extra={<Button type="primary" icon={<PlusCircleOutlined />} 
-          onClick={this.showModal}>添加分类</Button>}>              
+          extra={
+          <Button type="primary" icon={<PlusCircleOutlined />} 
+          onClick={
+            ()=>{
+              this.isAdd = true
+              this.showModal()
+          }}>
+              添加分类
+            </Button>}>              
           <Table 
           dataSource={dataSource} 
           columns={columns} 
@@ -99,7 +121,7 @@ class Category extends Component{
           />
         </Card>
         <Modal
-          title="添加分类"
+          title= {this.isAdd ? "添加分类" : "修改分类"}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -112,8 +134,10 @@ class Category extends Component{
             <Item name="category"
             rules={[
               { required: true, message: '请输入分类名称' }
-            ]}>
-              <Input placeholder="请输入分类名称"/>
+            ]}
+            initialValue= {this.value}
+            >
+              <Input placeholder="请输入分类名称" />
             </Item>
           </Form>
         </Modal>

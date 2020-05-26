@@ -35,8 +35,13 @@ class LeftNav extends Component {
     })
   }
   render() {
-    const selectKey = this.props.history.location.pathname.split('/').reverse()[0]
-    const openKey = this.props.history.location.pathname.split('/').reverse()[1]
+    const {pathname} = this.props.history.location
+    let selectKey = this.props.history.location.pathname.split('/').reverse()[0]
+    let openKey = this.props.history.location.pathname.split('/').reverse()[1]
+    if (pathname.indexOf ('/admin/prod_about/product')!== -1) {
+      selectKey = 'product'
+      openKey = 'prod_about'
+    }
     return(
       <div>
         <div className="nav-header">
