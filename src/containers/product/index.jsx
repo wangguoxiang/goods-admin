@@ -13,6 +13,7 @@ const { Option } = Select
 export default class Home extends Component{
 
   state = {
+    loading:true,
     ProductList:[],
     searchType:'productName',
     total:'',
@@ -32,10 +33,12 @@ export default class Home extends Component{
     if (status === 0) {
       this.setState({
         ProductList:data.list,
-        total:data.total
+        total:data.total,
+        loading:false
       })
     } else {
       message.error('获商品列表失败')
+      this.setState({loading:false})
     }
   }
 
@@ -57,6 +60,7 @@ export default class Home extends Component{
 
   componentDidMount () {
     this.getProductList(1)
+    this.pageNow = 1
   }
 
   render() {
@@ -166,6 +170,7 @@ export default class Home extends Component{
      dataSource={dataSource}
      columns={columns} 
      bordered
+     loading={this.state.loading}
      pagination={
        {pageSize:4,
         total:this.state.total,

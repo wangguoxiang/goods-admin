@@ -39,3 +39,16 @@ export const reqProduct = ({pageNum,pageSize,searchName,searchType}) => myAxios.
 
 // 对商品进行上架/下架处理
 export const reqProductUpdate = (productId,status) => myAxios.post('/manage/product/updateStatus',{productId,status})
+
+// 删除上传图片
+export const reqRemovedPicture = (name) => myAxios.post('/manage/img/delete',{name})
+
+// 添加商品
+export const reqAddProduct = ({categoryId,name,desc,price,detail,imgs}) => 
+  myAxios.post('/manage/product/add',{categoryId,name,desc,price,detail,imgs})
+
+// 根据分类Id获取分类名称
+export const reqCategoty = (categoryId) => myAxios.get('/manage/category/info',{params:{categoryId}})
+
+// 根据商品Id获取商品
+export const reqProductDetail = (productId) => myAxios.get('/manage/product/info',{params:{productId}})
