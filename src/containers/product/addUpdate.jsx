@@ -5,7 +5,7 @@ import {ArrowLeftOutlined}
 
 import Pictureswall from './picturesWall'
 import Richtext from './richText'
-import {reqCategoryList, reqAddProduct} from '../../api' 
+import {reqCategoryList, reqAddProduct, reqProductDetail, reqProductUpdateDetail} from '../../api' 
 
 const {Item} = Form
 const { Option } = Select
@@ -13,16 +13,27 @@ const { Option } = Select
 class AddUpdate extends Component{
 
   state = {
-    categoryList:[]
+    categoryList:[],
+    product:{
+    },
+    isUpdate: false
   }
 
+  // 添加/修改商品
   onFinish = async (values) => {
+    let result
+    const {id} = this.props.match.params
     values.imgs = this.refs.Pictureswall.getImgsName()
     values.detail = this.refs.Richtext.getRichText()
-    let result = await reqAddProduct(values)
+    if (id) {
+      values._id = id
+      result = await reqProductUpdateDetail(values)
+    } else {
+      result = await reqAddProduct(values)
+    }
     const {status, msg} = result
     if (status === 0) {
-      message.success('添加商品成功！')
+      message.success(id ? '修改商品成功！' : '添加商品成功！')
       this.props.history.replace('/admin/prod_about/product')
     } else {
       message.warning(msg)
@@ -38,14 +49,34 @@ class AddUpdate extends Component{
     } else {
       message.warning('获取分类列表失败')
     }
+  }
 
+  // 获取商品详情
+  getProduct = async (id) =>{
+    let result = await reqProductDetail(id)
+    const {status, data, msg} = result
+    if (status === 0) {
+      this.setState({product:data})
+      const {name, desc, price, categoryId, detail, imgs} = this.state.product
+      this.refs.Pictureswall.setImgsName(imgs)
+      this.refs.Richtext.setRichText(detail)
+      this.refs.Form.setFieldsValue({
+        name,desc,price,categoryId
+      })
+    } else{
+      message.warning(msg)
+    }
   }
 
   componentDidMount () {
+    const {id} = this.props.match.params
+    if (id) this.getProduct(id)
     this.getCategoryList()
   }
 
   render() {
+    const {id} = this.props.match.params
+    const {name, desc, price, categoryId} = this.state.product
     return(
         <Card 
           title={
@@ -57,26 +88,29 @@ class AddUpdate extends Component{
               }}
             ><ArrowLeftOutlined style={{fontSize:15}}
             />
-            </Button>添加商品
+            </Button>{id ? '修改商品' : '添加商品'}
           </div>}
         >
          <Form
           labelCol={{ span:2 }}
           wrapperCol={{span: 8}}
           onFinish={this.onFinish}
+          ref="Form"
          >
           <Item
             label="商品名称"
             name="name"
             rules={[{ required: true, message: '必须输入商品名称!' }]}
+            initialValue={name || ''}
           >
-            <Input placeholder="商品名称"/>
+            <Input placeholder="商品名称" />
           </Item>
 
           <Item
             label="商品描述"
             name="desc"
             rules={[{ required: true, message: '必须输入商品描述!' }]}
+            initialValue={desc || ''}
           >
             <Input placeholder="商品描述" />
           </Item>
@@ -84,6 +118,7 @@ class AddUpdate extends Component{
             label="商品价格"
             name="price"
             rules={[{ required: true, message: '必须输入价格!' }]}
+            initialValue={price || ''}
           >
             <Input placeholder=" 商品价格" prefix='￥' addonAfter='元'/>
           </Item>
@@ -91,6 +126,7 @@ class AddUpdate extends Component{
             label="商品分类"
             name="categoryId"
             rules={[{ required: true, message: '必须输入商品分类!' }]}
+            initialValue={categoryId || ''}
           >
             <Select placeholder='请选择分类'>
               {this.state.categoryList.map((item,index)=>{

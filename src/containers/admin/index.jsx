@@ -36,7 +36,8 @@ class Admin extends Component {
             <Route path='/admin/home' component={Home} />
             <Route path='/admin/prod_about/category' component={Category} />
             <Route path='/admin/prod_about/product' component={Product} exact/>
-            <Route path='/admin/prod_about/product/addupdate' component={AddUpdate}/>
+            <Route path='/admin/prod_about/product/addupdate' component={AddUpdate} exact/>
+            <Route path='/admin/prod_about/product/addupdate/:id' component={AddUpdate}/>
             <Route path='/admin/prod_about/product/detail/:id' component={Detail}/>
             <Route path='/admin/user' component={User} />
             <Route path='/admin/role' component={Role} />

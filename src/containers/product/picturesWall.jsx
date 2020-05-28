@@ -21,6 +21,7 @@ export default class PicturesWall extends Component {
     fileList: []
   }
 
+  // 获取图片数组
   getImgsName = () => {
     let arr = []
     this.state.fileList.forEach(
@@ -29,6 +30,20 @@ export default class PicturesWall extends Component {
       }
     )
     return arr
+  }
+
+
+  // 展示图片
+  setImgsName = (imgs) => {
+    let arr = imgs.map((item,index)=>{
+      return {
+        uid: -index,
+        name: item,
+        status:'done',
+        url:`/upload/${item}`
+      }
+    })
+    this.setState({fileList:arr})
   }
 
   handleCancel = () => this.setState({ previewVisible: false });

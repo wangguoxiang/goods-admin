@@ -52,3 +52,17 @@ export const reqCategoty = (categoryId) => myAxios.get('/manage/category/info',{
 
 // 根据商品Id获取商品
 export const reqProductDetail = (productId) => myAxios.get('/manage/product/info',{params:{productId}})
+
+// 修改商品
+export const reqProductUpdateDetail = ({_id,categoryId,name,desc,price,detail,imgs}) => myAxios.post('/manage/product/update',
+  {_id,categoryId,name,desc,price,detail,imgs}
+)
+
+// 获取角色列表
+export const reqRoleList = () => myAxios.get('/manage/role/list')
+
+// 创建角色
+export const reqCreateRole = (roleName) => myAxios.post('/manage/role/add',{roleName})
+
+// 角色授予权限
+export const reqAuthRole = ({_id,menus,auth_name}) => myAxios.post('/manage/role/update',{_id,menus,auth_name,auth_time:Date.now()})

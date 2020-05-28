@@ -98,7 +98,7 @@ class Header extends Component {
   }
 
   componentWillUnmount () {
-    clearInterval()
+    clearInterval(this.dateInterval)
   }
 
   render () {

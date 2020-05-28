@@ -10,7 +10,7 @@ import {reqProductList, reqProduct, reqProductUpdate} from '../../api'
 const { Option } = Select
 
 
-export default class Home extends Component{
+export default class Product extends Component{
 
   state = {
     loading:true,
@@ -128,7 +128,11 @@ export default class Home extends Component{
               }>详情
               </Button>
               <br/>
-              <Button type="link">修改</Button>
+              <Button type="link" onClick={()=>{
+                this.props.history.push(`/admin/prod_about/product/addupdate/${value.key}`)
+              }}         
+              >修改
+              </Button>
             </div>
           )
         }
