@@ -1,7 +1,7 @@
-// 保存管理员信息
+// 保存用户信息
 export const SAVE_USER = 'save_user'
 
-// 清除管理员信息
+// 清除用户信息
 export const DELETEUSERACTION = 'deleteUserAction'
 
 // 保存标题信息

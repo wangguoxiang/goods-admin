@@ -16,7 +16,7 @@ import './header.less'
 const { confirm } = Modal
 
 @connect(
-  state => ({username: state.userInfo.user, title: state.title}),
+  state => ({username: state.userInfo.user.username, title: state.title}),
   {deleteUserAction,saveTitleAction}
 )
 @withRouter

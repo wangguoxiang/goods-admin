@@ -10,7 +10,7 @@ const {Item} = Form
 const {TreeNode} = Tree
 
 @connect(
-  state => ({username: state.userInfo.user}),
+  state => ({username: state.userInfo.user.username}),
   {}
 )
 class Role extends Component{

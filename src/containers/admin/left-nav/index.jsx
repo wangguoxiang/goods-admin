@@ -11,28 +11,54 @@ import Logo from './images/logo.jpg'
 const { SubMenu, Item} = Menu
 
 @connect(
-  state => ({}),
+  state => ({roleMenus: state.userInfo.user.role.menus, username: state.userInfo.user.username}),
   {saveTitleAction}
 )
 @withRouter
 class LeftNav extends Component {
 
-  getMenuList = (menuList) => {
+  // 权限校验
+  AuthCheck = (item) => {
+/*     const {roleMenus} = this.props
     return menuList.map((item)=>{
       if (item.children instanceof Array) {
-        return (
-        <SubMenu key={item.key} icon= {<item.icon/>} title={item.title}>
-          {this.getMenuList(item.children)}
-        </SubMenu>
-        )
+        return item.children.find((itemChild) => roleMenus.indexOf(itemChild.key) !== -1 )
       } else {
-        return (
-          <Item key={item.key} icon={< item.icon/>} onClick={()=>{this.props.saveTitleAction(item.title)}}>
-            <Link to={item.path}>{item.title}</Link>
-          </Item>
-        )
+        return roleMenus.indexOf(item.key) !== -1
       }
-    })
+    }) */
+    const {roleMenus} = this.props
+    if (this.props.username === 'admin') {
+      return true
+    }else if (item.children) {
+      return item.children.find((itemChild)=> roleMenus.indexOf(itemChild.key) !== -1)
+    } 
+    else {
+      return roleMenus.indexOf(item.key) !== -1
+    }
+  }
+
+  // 获取菜单
+  getMenuList = (menuList) => {
+     // eslint-disable-next-line
+      return menuList.map((item)=>{
+        if (this.AuthCheck(item)) {
+          if (item.children instanceof Array) {
+            return (
+            <SubMenu key={item.key} icon= {<item.icon/>} title={item.title}>
+              {this.getMenuList(item.children)}
+            </SubMenu>
+            )
+          } else {
+            return (
+              <Item key={item.key} icon={< item.icon/>} onClick={()=>{this.props.saveTitleAction(item.title)}}>
+                <Link to={item.path}>{item.title}</Link>
+              </Item>
+            )
+          }
+        }
+      })
+    
   }
   render() {
     const {pathname} = this.props.history.location

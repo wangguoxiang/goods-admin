@@ -66,3 +66,15 @@ export const reqCreateRole = (roleName) => myAxios.post('/manage/role/add',{role
 
 // 角色授予权限
 export const reqAuthRole = ({_id,menus,auth_name}) => myAxios.post('/manage/role/update',{_id,menus,auth_name,auth_time:Date.now()})
+
+// 获取用户列表
+export const reqUserList = () => myAxios.get('/manage/user/list')
+
+// 创建用户
+export const reqCreateUser = ({username,password,phone,email,role_id}) => myAxios.post('/manage/user/add',{username,password,phone,email,role_id})
+
+// 删除用户
+export const reqDeleteUser = (userId) => myAxios.post('/manage/user/delete',{userId})
+
+// 修改用户信息
+export const reqUpdateUser = ({_id,username,phone,email,role_id}) => myAxios.post('/manage/user/update',{_id,username,phone,email,role_id})
