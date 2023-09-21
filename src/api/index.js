@@ -5,7 +5,7 @@ import {message} from 'antd'
 import {WEATHER_BASE_UTL, WEATHER_CITY, WEATHER_AK}from '../config'
 
 // 请求登录接口
-export const reqLogin = (loginObj) => myAxios.post('/api/v1/login',loginObj)
+export const reqLogin = (loginObj) => myAxios.post('/api/v1/login', loginObj)
 
 // 请求天气信息接口
 export const reqWeaterData = () => {

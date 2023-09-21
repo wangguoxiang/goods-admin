@@ -84,11 +84,12 @@ class Login extends Component {
     let loginResult = await reqLogin(value)
     const {status} = loginResult
     if (status === 200) {
-      message.success('登录成功', 1)
 
+      message.success('登录成功', 1)
+   
       //保存用户信息，交由redux进行管理
-      console.log(loginResult.data);
-      this.props.saveUserAction(loginResult.data)
+      console.log(loginResult.data.token);
+      this.props.saveUserAction(loginResult.data.token);
       this.props.history.replace('/admin')
     } else {
       message.warning(loginResult.message, 1)

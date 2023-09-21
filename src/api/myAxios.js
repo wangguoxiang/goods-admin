@@ -12,8 +12,27 @@ myAxios.defaults.baseURL = BASE_URL
   myAxios.interceptors.request.use(
     config => {
       NProgress.start()
+     // config.headers['Content-Type'] = 'application/json;charset=utf-8';
+      let user = localStorage.getItem("user")?JSON.parse(localStorage.getItem("user")):null
+      console.log(user);
+      if (user) {
+         //config.headers['token'] = user; // 让每个请求携带自定义token 请根据实际情况自行修改
+         //let param = config.params;
+        //  if(param == null)
+        //  {
+        //    config.params = qs.stringify("token="+ user);
+        //  } 
+        //  else {
+        //   config.params =qs.stringify(param + "&token="+ user);
+        //  }
+        paramsSerializer: function(params) {
+          return Qs.stringify(params, {arrayFormat: 'brackets'})
+        },
+        
+       }
       let data = config.data
       config.data = qs.stringify(data)
+      console.log(config)
       return config 
     },
     err => {
@@ -25,6 +44,10 @@ myAxios.defaults.baseURL = BASE_URL
   myAxios.interceptors.response.use(
     response => {
       NProgress.done()
+      if (response.data.errno === 999) {
+        this.props.history.replace('/login')
+        console.log("token过期");
+      }
       const result = response.data
       return result
     },

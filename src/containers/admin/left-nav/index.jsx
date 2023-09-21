@@ -28,7 +28,7 @@ class LeftNav extends Component {
       }
     }) */
     const {roleMenus} = this.props
-    console.log(this.roleMenus)
+    //console.log(this.roleMenus)
     if (this.props.username === 'admin') {
       return true
     }else if (item.children) {
