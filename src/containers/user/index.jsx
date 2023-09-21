@@ -14,19 +14,21 @@ export default class User extends Component{
   state = { 
     visible: false,
     users:[],
-    roles:[]
+    roles:[],
   }
+
+ 
 
   // 展示用户操作框
   showModal = (item) => {
     if (this.isUpdate) {
       console.log(item)
-/*       this.refs.Form.setFieldsValue({
+        this.refs.Form.setFieldsValue({
         username:item.username,
         phone:item.phone,
         email:item.email,
         role_id: item.role_id
-      }) */
+      }) 
     }
     this.setState({
       visible: true,
@@ -44,7 +46,7 @@ export default class User extends Component{
         } else{
           result = await reqCreateUser(values)
         }
-        console.log(result)
+       
         const {status, msg} = result
         if (status === 0) {
           message.success(this.isUpdate ? '修改用户信息成功' : '创建用户成功')
@@ -110,6 +112,11 @@ export default class User extends Component{
 
   render() {
     const {roles, users} = this.state
+    const sex = [
+      {vlaue: 0, key:'男', name: '男'},
+      {value: 1, key:'女', name: '女'},
+    ]
+
     const dataSource = users.map((item)=>{
       return {
         key: item._id,
@@ -124,44 +131,69 @@ export default class User extends Component{
       {
         title: '用户名',
         dataIndex: 'username',
-        width: '13%',
+        width: '8%',
         align: 'center',
         key: 'username',
       },
       {
-        title: '邮箱',
-        dataIndex: 'email',
-        width: '18%',
+        title: '姓名',
+        dataIndex: 'name',
+        width: '8%',
         align: 'center',
-        key: 'email',
+        key: 'name',
       },
       {
         title: '电话',
-        dataIndex: 'phone',
+        dataIndex: 'mobile',
+        width: '10%',
         align: 'center',
-        key: 'phone',
+        key: 'mobile',
+      },
+      {
+        title: '性别',
+        dataIndex: 'sex',
+        width: '5%',
+        align: 'center',
+        key: 'sex',
+      },
+      {
+        title: '年齡',
+        dataIndex: 'age',
+        width: '5%',
+        align: 'center',
+        key: 'age',
+      },
+      {
+        title: '职称',
+        dataIndex: 'job',
+        width: '5%',
+        align: 'center',
+        key: 'job',
+      },
+      {
+        title: '头像',
+        dataIndex: 'avatar',
+        width: '5%',
+        align: 'center',
+        key: 'avatar',
       },
       {
         title: '注册时间',
         dataIndex: 'create_time',
-        width: '20%',
+        width: '15%',
         align: 'center',
         key: 'create_time',
       },
       {
-        title: '所属角色',
-        dataIndex: 'role_id',
-        width: '17%',
+        title: '最后登录时间',
+        dataIndex: 'end_time',
+        width: '15%',
         align: 'center',
-        key: 'role_id',
-        render: (role_id) => {
-          let roleItem = roles.find((item)=> item._id === role_id)
-          return roleItem.name
-        }
+        key: 'end_time',
       },
       {
         title: '操作',
-        width: '15%',
+        width: '10%',
         align: 'center',
         key: 'todo',
         render: (item)=>{
@@ -238,29 +270,43 @@ export default class User extends Component{
           }
           <Item
             label="手机号"
-            name="phone"
+            name="mobile"
             rules={[{ required: true, message: '必须输入手机!' }]} 
           >
             <Input placeholder="请输入手机号"/>
           </Item>
           <Item
-            label="邮箱"
-            name="email" 
+            label="姓名"
+            name="name" 
           >
-            <Input placeholder="请输入邮箱"/>
+            <Input placeholder="请输入用户真实姓名"/>
           </Item>
           <Item
-            label="角色"
-            name="role_id"
-            rules={[{ required: true, message: '必须指定角色!' }]} 
+            label="性别"
+            name="sex"
+            rules={[{ required: false, message: '选择性别' }]} 
           >
             <Select>
               {
-                roles.map((item)=>{
-                  return <Option value={item._id} key={item._id}>{item.name}</Option>
+                sex.map((item)=>{
+                  return <Option value={item.value} key={item.key}>{item.name}</Option>
                 })
               }
             </Select>
+          </Item>
+          <Item
+            label="年龄"
+            name="age"
+            rules={[{ required: false, message: '请输入用户实际年龄' }]} 
+          >
+             <Input placeholder="请输入用户实际年龄"/>
+          </Item>
+          <Item
+            label="教师职称"
+            name="job"
+            rules={[{ required: false, message: '请输入用户职称' }]} 
+           >
+             <Input placeholder="请输入用户职称"/>
           </Item>
         </Form>
       </Modal>

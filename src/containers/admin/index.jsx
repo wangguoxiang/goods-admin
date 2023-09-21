@@ -15,8 +15,10 @@ import Role from '../role'
 import Bar from '../bar'
 import Line from '../line'
 import Pie from '../pie'
+import Books from '../books'
 
 import './css/admin.less'
+
 
 const {Footer, Sider, Content } = Layout;
 
@@ -44,11 +46,13 @@ class Admin extends Component {
             <Route path='/admin/charts/bar' component={Bar} />
             <Route path='/admin/charts/line' component={Line} />
             <Route path='/admin/charts/pie' component={Pie} />
+            <Route path='/admin/book/books' component={Books} />
+            
             <Redirect to='/admin/home' />
           </Switch>
         </Content>
         <Footer className="footer">
-          用户可以通过不同的权限进行商品管理，管理员拥有最高权限
+          用户可以通过不同的权限进行教材管理系统，管理员拥有最高权限
         </Footer>
       </Layout>
     </Layout>

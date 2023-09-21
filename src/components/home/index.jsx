@@ -6,7 +6,7 @@ export default class Home extends Component{
   render() {
     return(
       <div className="home">
-        <h1>欢迎使用商品后台管理系统</h1>
+        <h1>欢迎使用某某学校教材管理系统</h1>
       </div>
     )
   }

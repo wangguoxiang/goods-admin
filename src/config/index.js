@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000' //配置请求地址
+export const BASE_URL = 'http://localhost:10085' //配置请求地址
 
 export const WEATHER_BASE_UTL = 'http://api.map.baidu.com/telematics/v3/weather' //天气请求地址 
 

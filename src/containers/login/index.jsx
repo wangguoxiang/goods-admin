@@ -1,23 +1,69 @@
-import React, {Component} from 'react'
+import React, {Component,useState} from 'react'
 import {Form, Input, Button, message} from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import {connect} from 'react-redux'
 
 import CheckLogin from '../check_login'
 import {saveUserAction} from '../../redux/actions/loginAction.js'
-import {reqLogin} from '../../api'
-
+import {reqLogin,getCaptcha} from '../../api'
+import UploadCutImage from '../../components/image/UploadCutImage';
+import {BASE_URL} from '../../config'
 import './css/login.less'
 import logo from './images/logo5.png'
+
+
+export function Imageload(props){
+  const getInit = async () => {
+       let v =  await getCaptcha().then(
+        request=>{
+          return request;
+        },
+        error=>{
+          console.log(error)
+          return 
+        }
+    )
+    setImage(v);
+ }
+
+  const [image,setImage] = useState(getInit);
+
+  return(<img 
+  src={image}
+  alt="点击刷新"
+  style={{ cursor:'pointer' }}></img>);
+} 
+
+
+export function UseStateTest({ initialState }) {
+  // 2
+  let [username, changeUserName] = useState(initialState)
+  // 3
+  return (
+    <div>
+      <label style={{ display: 'block' }} htmlFor="username">username: {username}</label>
+      <input type="text" name="username" onChange={e => changeUserName(e.target.value)} />
+    </div>
+  )
+
+}
 
 const {Item} = Form
 
 @connect(
   state => ({isLogin: state.userInfo.isLogin}),
   {saveUserAction})
+
 @CheckLogin
 class Login extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+        rememberEmail: '',
+        imgUrl: BASE_URL + `/api/v1/captcha?id=` + Math.random()
+    };
+  }
   // 自定义校验
   validator = (rule, value) => {
     if (value === '') {
@@ -37,23 +83,35 @@ class Login extends Component {
   onFinish = async (value) =>{
     let loginResult = await reqLogin(value)
     const {status} = loginResult
-    if (status === 0) {
+    if (status === 200) {
       message.success('登录成功', 1)
 
       //保存用户信息，交由redux进行管理
+      console.log(loginResult.data);
       this.props.saveUserAction(loginResult.data)
-
-
       this.props.history.replace('/admin')
     } else {
-      message.warning(loginResult.msg, 1)
+      message.warning(loginResult.message, 1)
+      this.getCaptcha();
     }
   }
+
+ /**
+     * 刷新验证码
+     */
+ getCaptcha() {
+  this.setState({
+      //在后面加上一个无用的参数id实现验证码刷新
+      imgUrl: BASE_URL + `/api/v1/captcha?id=` + Math.random()
+  });
+}
+
+
   render () {
     return (
       <div id="login">
         <div className="header">
-          <img src={logo} alt="logo"/> <h1>商品后台管理系统</h1>
+          <img src={logo} alt="logo"/> <h1>某某学校教材管理系统</h1>
         </div>
         <div className="content">
           <h2>用户登录</h2>
@@ -73,13 +131,31 @@ class Login extends Component {
           <Item
           name="password"
           rules={[{validator: this.validator}]}
-        >
+          >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="密码"
             autoComplete="password"
           />
+        </Item>
+        <Item 
+        name="captcha"
+        rules={[
+          { required: true, message: '请输入验证码！' },
+          { min: 4, message: '验证码大于等于4位'},
+          { max: 4, message: '验证码小于等于4位'},
+        ]}
+        >
+        <div style={{ display: 'flex' }}>
+          <Input type="text" placeholder="验证码" className="code-input" />
+            <div className="login-captcha">
+              <div>
+                <img src={this.state.imgUrl} key={this.state.key} />
+              </div>
+              <span className="change-code" onClick={this.getCaptcha.bind(this)}>换一张</span>
+            </div>
+        </div>
         </Item>
           <Item>
             <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>

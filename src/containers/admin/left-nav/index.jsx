@@ -11,7 +11,7 @@ import Logo from './images/logo.jpg'
 const { SubMenu, Item} = Menu
 
 @connect(
-  state => ({roleMenus: state.userInfo.user.role.menus, username: state.userInfo.user.username}),
+  state => ({roleMenus: state.userInfo.user.menuList, username: state.userInfo.user.username}),
   {saveTitleAction}
 )
 @withRouter
@@ -28,13 +28,14 @@ class LeftNav extends Component {
       }
     }) */
     const {roleMenus} = this.props
+    console.log(this.roleMenus)
     if (this.props.username === 'admin') {
       return true
     }else if (item.children) {
-      return item.children.find((itemChild)=> roleMenus.indexOf(itemChild.key) !== -1)
+      return true //item.children.find((itemChild)=> roleMenus.indexOf(itemChild.key) !== -1)
     } 
     else {
-      return roleMenus.indexOf(item.key) !== -1
+      return true //roleMenus.indexOf(item.key) !== -1
     }
   }
 
@@ -72,7 +73,7 @@ class LeftNav extends Component {
       <div>
         <div className="nav-header">
           <img src={Logo} alt="logo"/>
-          <h1>商品后台</h1>
+          <h1>学校教材管理后台</h1>
         </div>
         <Menu 
           selectedKeys={[selectKey]}

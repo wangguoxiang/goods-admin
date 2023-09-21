@@ -5,7 +5,7 @@ import {message} from 'antd'
 import {WEATHER_BASE_UTL, WEATHER_CITY, WEATHER_AK}from '../config'
 
 // 请求登录接口
-export const reqLogin = (loginObj) => myAxios.post('/login',loginObj)
+export const reqLogin = (loginObj) => myAxios.post('/api/v1/login',loginObj)
 
 // 请求天气信息接口
 export const reqWeaterData = () => {
@@ -68,7 +68,7 @@ export const reqCreateRole = (roleName) => myAxios.post('/manage/role/add',{role
 export const reqAuthRole = ({_id,menus,auth_name}) => myAxios.post('/manage/role/update',{_id,menus,auth_name,auth_time:Date.now()})
 
 // 获取用户列表
-export const reqUserList = () => myAxios.get('/manage/user/list')
+export const reqUserList = () => myAxios.get('/api/v1/lists/1/10')
 
 // 创建用户
 export const reqCreateUser = ({username,password,phone,email,role_id}) => myAxios.post('/manage/user/add',{username,password,phone,email,role_id})
@@ -78,3 +78,18 @@ export const reqDeleteUser = (userId) => myAxios.post('/manage/user/delete',{use
 
 // 修改用户信息
 export const reqUpdateUser = ({_id,username,phone,email,role_id}) => myAxios.post('/manage/user/update',{_id,username,phone,email,role_id})
+
+// 获取验证码
+export const getCaptcha = () => myAxios.get('/api/v1/captcha')
+
+//文件上传
+export const uploadFile = ({formData}) => myAxios.post('/api/v1/files/upload',{formData})
+
+//搜索教材保存信息
+export const reqBook = ({pageNum,pageSize,searchName,searchType}) => myAxios.get('/manager/book/search',{params:{pageNum,pageSize,[searchType]:searchName}})
+
+//教材保存信息
+export const reqBookList = (pageNum, pageSize) => myAxios.get('manage/book/list',{params:{pageNum, pageSize}})
+
+//更新教材信息
+export const reqBookUpdate =  (bookId,isSell) => myAxios.post('manager/book/update',{params:{bookId,isSell}})

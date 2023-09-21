@@ -28,7 +28,7 @@ html,body{
         margin-top: 60px;
         width: 350px;
         padding: 35px;
-        border: 1px solid rgba(255, 255, 255, 0.307);;
+        border: 1px solid rgba(255, 255, 255, 0.307);
         h2{
           text-align: center;
           font-size: 25px;
@@ -38,6 +38,44 @@ html,body{
         .login-form-button{
           width: 100%;
         } 
+
+        .login-captcha{
+          position: relative;
+          display: flex;
+          margin:0 auto;
+          text-align: center;
+
+          img {
+            padding-left: 10px;
+            max-width: 120px;
+            min-width: 100px;
+            border-style: none;
+            height: 100%;
+          }
+
+          span {
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            line-height: 45px;
+            font-size: 16px;
+            z-index: 1;
+            color: #b0afaf;
+            background: #000;
+            opacity: 0;
+            -webkit-transition: all .4s linear;
+            transition: all .4s linear;
+          }
+
+          &:hover > span {
+            opacity: .7;
+          }
+        }
       }
+     
   }
 }
